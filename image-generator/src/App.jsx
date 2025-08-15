@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Github, ExternalLink, AlertCircle } from 'lucide-react';
+import { Sparkles, Github, AlertCircle, Linkedin, Instagram } from 'lucide-react';
 import PromptInput from './components/PromptInput';
 import Gallery from './components/Gallery';
 import Loader from './components/Loader';
+import ThemeToggle from './components/ThemeToggle'; // Import ThemeToggle
 
 function App() {
   const [images, setImages] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState(null);
-  const [isDark] = useState(true); // Always true
+  const [isDark, setIsDark] = useState(true);
 
   // Load images from localStorage on mount
   useEffect(() => {
@@ -21,10 +22,22 @@ function App() {
         console.error('Failed to load saved images:', error);
       }
     }
-
-    // Always set dark theme
-    document.documentElement.classList.add('dark');
+    // Set theme on mount
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }, []);
+
+  // Update theme when isDark changes
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
 
   // Save images to localStorage whenever images change
   useEffect(() => {
@@ -94,9 +107,18 @@ function App() {
     }
   };
 
+  // Toggle theme handler
+  const toggleTheme = () => setIsDark((prev) => !prev);
+
   return (
-    <div className={`min-h-screen transition-all duration-500 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900`}>
-      {/* <ThemeToggle isDark={isDark} onToggle={toggleTheme} /> */}
+    <div
+      className={`min-h-screen transition-all duration-500 ${
+        isDark
+          ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900'
+          : 'bg-gradient-to-br from--600 via-blue-300 to-biege-600'
+      }`}
+    >
+      <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
       
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
@@ -173,7 +195,7 @@ function App() {
         >
           <div className="flex items-center justify-center gap-6 text-gray-600 dark:text-gray-400">
             <a
-              href="https://github.com"
+              href="https://github.com/iamvmt/AI-Image-Generator"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 hover:text-purple-600 dark:hover:text-purple-400 
@@ -183,18 +205,28 @@ function App() {
               <span>GitHub</span>
             </a>
             <a
-              href="https://netlify.com"
+              href="https://www.linkedin.com/in/iamvmt"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 hover:text-purple-600 dark:hover:text-purple-400 
                        transition-colors duration-200"
             >
-              <ExternalLink size={18} />
-              <span>Netlify</span>
+              <Linkedin size={18} />
+              <span>LinkedIn</span>
+            </a>
+            <a
+              href="https://www.instagram.com/iamvmt/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 hover:text-purple-600 dark:hover:text-purple-400 
+                       transition-colors duration-200"
+            >
+              <Instagram size={18} />
+              <span>Instagram</span>
             </a>
           </div>
           <p className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-            Built with React, Tailwind CSS, and Framer Motion
+            Built with React, Tailwind CSS, and Framer Motion by VMT
           </p>
         </motion.footer>
       </div>
