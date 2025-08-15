@@ -2,15 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Download, Calendar } from 'lucide-react';
 
-interface ImageCardProps {
-  src: string;
-  prompt: string;
-  timestamp: number;
-  onDownload: () => void;
-}
+// ImageCard component props: src (string), prompt (string), timestamp (number), onDownload (function)
 
-export default function ImageCard({ src, prompt, timestamp, onDownload }: ImageCardProps) {
-  const formatDate = (timestamp: number) => {
+export default function ImageCard({ src, prompt, timestamp, onDownload }) {
+  const formatDate = (timestamp) => {
     return new Date(timestamp).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
