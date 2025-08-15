@@ -4,13 +4,12 @@ import { Sparkles, Github, ExternalLink, AlertCircle } from 'lucide-react';
 import PromptInput from './components/PromptInput';
 import Gallery from './components/Gallery';
 import Loader from './components/Loader';
-import ThemeToggle from './components/ThemeToggle';
 
 function App() {
   const [images, setImages] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState(null);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark] = useState(true); // Always true
 
   // Load images from localStorage on mount
   useEffect(() => {
@@ -23,24 +22,14 @@ function App() {
       }
     }
 
-    // Load theme preference
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setIsDark(true);
-      document.documentElement.classList.add('dark');
-    }
+    // Always set dark theme
+    document.documentElement.classList.add('dark');
   }, []);
 
   // Save images to localStorage whenever images change
   useEffect(() => {
     localStorage.setItem('ai-generated-images', JSON.stringify(images));
   }, [images]);
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', !isDark ? 'dark' : 'light');
-  };
 
   const generateImage = async (prompt, style, size) => {
     const apiKey = import.meta.env.VITE_HF_API_KEY;
@@ -106,12 +95,8 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen transition-all duration-500 ${
-      isDark 
-        ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900' 
-        : 'bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100'
-    }`}>
-      <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
+    <div className={`min-h-screen transition-all duration-500 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900`}>
+      {/* <ThemeToggle isDark={isDark} onToggle={toggleTheme} /> */}
       
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
